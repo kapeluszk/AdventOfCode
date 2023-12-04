@@ -87,6 +87,4 @@ func main() {
 		res += findInt(line)
 	}
 	fmt.Println(res)
-
-	fmt.Println(findInt("2911threeninesdvxvheightwobm"))
 }
