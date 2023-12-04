@@ -14,19 +14,27 @@ var cubeLimit = map[string]int{
 	"blue":  14,
 }
 
-func processGames(color, line string) bool {
+func processGames(color, line string) (bool, int) {
 	r, _ := regexp.Compile("(\\d+) " + color)
 	matches := r.FindAllStringSubmatch(line, -1)
 	validColor := true
+	colorMax := 0
 
+	//part 1
 	for _, submatch := range matches {
 		colorCount, _ := strconv.Atoi(submatch[1])
 
 		if validColor && (colorCount > cubeLimit[color]) {
 			validColor = false
 		}
+
+		//part 2
+		if colorCount >= colorMax {
+			colorMax = colorCount
+		}
 	}
-	return validColor
+
+	return validColor, colorMax
 }
 
 func separateNumberFromText(text string) (int, error) {
@@ -52,18 +60,23 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
-	res := 0
+	resPart1 := 0
+	resPart2 := 0
 	for scanner.Scan() {
 		line := scanner.Text()
 
 		gameIndex := findGameIndex(line)
-		validRed := processGames("red", line)
-		validBlue := processGames("blue", line)
-		validGreen := processGames("green", line)
+		validRed, maxRed := processGames("red", line)
+		validBlue, maxBlue := processGames("blue", line)
+		validGreen, maxGreen := processGames("green", line)
 
 		if validRed && validGreen && validBlue {
-			res += gameIndex
+			resPart1 += gameIndex
 		}
+
+		resPart2 += (maxRed * maxBlue * maxGreen)
+
 	}
-	fmt.Println(res)
+	fmt.Printf("Resoult for part1: %d\n", resPart1)
+	fmt.Printf("Resoult for part2: %d\n", resPart2)
 }
