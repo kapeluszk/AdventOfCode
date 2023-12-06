@@ -2,30 +2,40 @@ package main
 
 import (
 	"bufio"
+	"math"
 	"os"
 	"regexp"
 	"strings"
 )
 
-func prepareLines(splitted []string, i, int) int {
+func prepareLines(wholeFile [][]string) (score int) {
+	lenght := len(wholeFile)
+	cardQuantity := make([]int, lenght)
 	r, _ := regexp.Compile("(\\d+)")
-	keys := r.FindAllString(splitted[0], -1)
-	toBeChecked := r.FindAllString(splitted[1], -1)
 
-	matchCount := 0
-	for _, key := range keys[1:] {
-		for _, elem := range toBeChecked {
-			if key == elem {
-				matchCount++
+	for i := range cardQuantity {
+		cardQuantity[i] = 1
+	}
+	for i, _ := range wholeFile {
+		line := wholeFile[i]
+		keys := r.FindAllString(line[0], -1)
+		toBeChecked := r.FindAllString(line[1], -1)
+		//
+		matchCount := 0
+		for _, key := range keys[1:] {
+			for _, elem := range toBeChecked {
+				if key == elem {
+					matchCount++
 
+				}
 			}
 		}
-
+		if matchCount != 0 {
+			startIndex := i + 1
+			endIndex := math.MinInt(lenght, i+matchCount)
+		}
 	}
-	if matchCount != 0 {
-
-	}
-	return matchCount
+	return score
 }
 
 func main() {
@@ -42,9 +52,5 @@ func main() {
 		wholeFile = append(wholeFile, splitted)
 	}
 
-	for i, _ := range wholeFile {
-		startIndex := i + 1
-		endIndex :=
-	}
-
+	prepareLines(wholeFile)
 }
